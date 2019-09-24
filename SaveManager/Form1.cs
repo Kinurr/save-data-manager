@@ -8,13 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace SaveManager
 {
     public partial class Form1 : Form
     {
-        private int fileCount;
-
         public Form1()
         {
             InitializeComponent();
@@ -22,16 +21,26 @@ namespace SaveManager
 
         private void BackupButton_Click(object sender, EventArgs e)
         {
+            string fullPath = Path.GetFullPath(SaveDirectoryList.Items[0].ToString()).TrimEnd(Path.DirectorySeparatorChar);
+            string folderName = Path.GetFileName(fullPath);
+
+            Debug.WriteLine(folderName);
+
+            string targetPath = Path.Combine(BackupDirectoryText.Text, folderName);
+
+            Directory.CreateDirectory(targetPath);
+
+            Debug.WriteLine(targetPath + " " + Directory.Exists(targetPath));
 
             //Now Create all of the directories
-            foreach (string dirPath in Directory.GetDirectories(SourcePath, "*",
+            foreach (string dirPath in Directory.GetDirectories(fullPath, "*",
                 SearchOption.AllDirectories))
-                Directory.CreateDirectory(dirPath.Replace(SourcePath, BackupDirectoryText.Text));
+                Directory.CreateDirectory(dirPath.Replace(fullPath, targetPath));
 
             //Copy all the files & Replaces any files with the same name
-            foreach (string newPath in Directory.GetFiles(SourcePath, "*.*",
+            foreach (string newPath in Directory.GetFiles(fullPath, "*.*",
                 SearchOption.AllDirectories))
-                File.Copy(newPath, newPath.Replace(SourcePath, BackupDirectoryText.Text), true);
+                File.Copy(newPath, newPath.Replace(fullPath, targetPath), true);
 
             //if (!System.IO.Directory.Exists(BackupDirectoryText.Text))
             //{
