@@ -14,6 +14,8 @@ namespace SaveManager
 {
     public partial class Form1 : Form
     {
+        private int totalFilesBackedUp, totalMainDirectoriesBackedUp;
+
         public Form1()
         {
             InitializeComponent();
@@ -21,36 +23,52 @@ namespace SaveManager
 
         private void BackupButton_Click(object sender, EventArgs e)
         {
-            string fullPath = Path.GetFullPath(SaveDirectoryList.Items[0].ToString()).TrimEnd(Path.DirectorySeparatorChar);
-            string folderName = Path.GetFileName(fullPath);
+            BackupDirectory();
+        }
 
-            Debug.WriteLine(folderName);
+        private void BackupDirectory()
+        {
 
-            string targetPath = Path.Combine(BackupDirectoryText.Text, folderName);
-
-            Directory.CreateDirectory(targetPath);
-
-            Debug.WriteLine(targetPath + " " + Directory.Exists(targetPath));
-
-            //Now Create all of the directories
-            foreach (string dirPath in Directory.GetDirectories(fullPath, "*",
-                SearchOption.AllDirectories))
-                Directory.CreateDirectory(dirPath.Replace(fullPath, targetPath));
-
-            //Copy all the files & Replaces any files with the same name
-            foreach (string newPath in Directory.GetFiles(fullPath, "*.*",
-                SearchOption.AllDirectories))
+            for (int i = 0; i < SaveDirectoryList.Items.Count; i++)
             {
-                try
+                string fullPath = Path.GetFullPath(SaveDirectoryList.Items[i].ToString()).TrimEnd(Path.DirectorySeparatorChar);
+                string folderName = Path.GetFileName(fullPath);
+
+                string targetPath = Path.Combine(BackupDirectoryText.Text, folderName);
+
+                Directory.CreateDirectory(targetPath);
+
+                Debug.WriteLine(targetPath + " " + Directory.Exists(targetPath));
+
+                //Now Create all of the directories
+                foreach (string dirPath in Directory.GetDirectories(fullPath, "*",
+                    SearchOption.AllDirectories))
                 {
-                    File.Copy(newPath, newPath.Replace(fullPath, targetPath), true);
+                    Directory.CreateDirectory(dirPath.Replace(fullPath, targetPath));
+                    SetInfoText("Created directory " + folderName);
                 }
-                catch(IOException exception)
+
+                //Copy all the files & Replaces any files with the same name
+                foreach (string newPath in Directory.GetFiles(fullPath, "*.*",
+                    SearchOption.AllDirectories))
                 {
-                    MessageBox.Show(exception.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    try
+                    {
+                        File.Copy(newPath, newPath.Replace(fullPath, targetPath), true);
+                        totalFilesBackedUp++;
+                        SetInfoText("Copied file " + fullPath);
+                    }
+                    catch (IOException exception)
+                    {
+                        MessageBox.Show(exception.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
+
+                totalMainDirectoriesBackedUp++;
             }
 
+            MessageBox.Show("Sucessfully backed up " + totalMainDirectoriesBackedUp + " main directories containing a total of " +
+                totalFilesBackedUp + " files.", "Backup Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void BackupDirButton_Click(object sender, EventArgs e)
@@ -60,7 +78,7 @@ namespace SaveManager
             if (backupBrowser.ShowDialog() == DialogResult.OK)
             {
                 BackupDirectoryText.Text = backupBrowser.SelectedPath;
-                DebugLabel.Text = "Backup directory set to " + backupBrowser.SelectedPath;
+                SetInfoText("Backup directory set to " + backupBrowser.SelectedPath);
             }
         } 
 
@@ -73,14 +91,14 @@ namespace SaveManager
         {
             if(SaveDirectoryList.SelectedIndex >= 0)
             {
-                DebugLabel.Text = "Removed " + SaveDirectoryList.Items[SaveDirectoryList.SelectedIndex];
+                SetInfoText("Removed " + SaveDirectoryList.Items[SaveDirectoryList.SelectedIndex]);
                 SaveDirectoryList.Items.RemoveAt(SaveDirectoryList.SelectedIndex);
             }
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            DebugLabel.Text = "Application Started";
+            SetInfoText("Application started");
         }
 
         private void AddDirectoryToList()
@@ -90,8 +108,12 @@ namespace SaveManager
             if (saveDataBrowser.ShowDialog() == DialogResult.OK)
             {
                 SaveDirectoryList.Items.Add(saveDataBrowser.SelectedPath, true);
-                DebugLabel.Text = "Added " + saveDataBrowser.SelectedPath;
+                SetInfoText("Added " + saveDataBrowser.SelectedPath);
             }
+        }
+        private void SetInfoText(string s)
+        {
+            DebugLabel.Text = s;
         }
 
         //private void IsDuplicate(Object obj)
