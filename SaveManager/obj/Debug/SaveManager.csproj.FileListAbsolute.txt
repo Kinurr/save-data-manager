@@ -11,3 +11,16 @@ C:\Users\josef\source\repos\SaveManager\SaveManager\bin\Debug\en\SaveManager.res
 C:\Users\josef\source\repos\SaveManager\SaveManager\obj\Debug\SaveManager.Form1.en.resources
 C:\Users\josef\source\repos\SaveManager\SaveManager\obj\Debug\en\SaveManager.resources.dll
 C:\Users\josef\source\repos\SaveManager\SaveManager\obj\Debug\SaveManager.csprojAssemblyReference.cache
+C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\bin\Debug\SaveManager.exe.config
+C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\bin\Debug\SaveManager.exe
+C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\bin\Debug\SaveManager.pdb
+C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\bin\Debug\en\SaveManager.resources.dll
+C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\obj\Debug\SaveManager.csprojAssemblyReference.cache
+C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\obj\Debug\SaveManager.Form1.resources
+C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\obj\Debug\SaveManager.Properties.Resources.resources
+C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\obj\Debug\SaveManager.Form1.en.resources
+C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\obj\Debug\SaveManager.csproj.GenerateResource.cache
+C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\obj\Debug\SaveManager.csproj.CoreCompileInputs.cache
+C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\obj\Debug\en\SaveManager.resources.dll
+C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\obj\Debug\SaveManager.exe
+C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\obj\Debug\SaveManager.pdb

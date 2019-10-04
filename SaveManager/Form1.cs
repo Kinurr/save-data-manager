@@ -40,45 +40,17 @@ namespace SaveManager
             //Copy all the files & Replaces any files with the same name
             foreach (string newPath in Directory.GetFiles(fullPath, "*.*",
                 SearchOption.AllDirectories))
-                File.Copy(newPath, newPath.Replace(fullPath, targetPath), true);
+            {
+                try
+                {
+                    File.Copy(newPath, newPath.Replace(fullPath, targetPath), true);
+                }
+                catch(IOException exception)
+                {
+                    MessageBox.Show(exception.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
 
-            //if (!System.IO.Directory.Exists(BackupDirectoryText.Text))
-            //{
-            //    MessageBox.Show("Invalid backup directory!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    return;
-            //}
-
-            //if(SaveDirectoryList.Items.Count < 1)
-            //{
-            //    MessageBox.Show("List is empty!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    return;
-            //}
-
-            //if (System.IO.Directory.Exists(SaveDirectoryList.Items[0].ToString()))
-            //{
-            //    fileCount = 0;
-
-            //    string[] files = System.IO.Directory.GetFiles(SaveDirectoryList.Items[0].ToString());
-            //    DebugLabel.Text = files.ToString();
-
-            //    // Copy the files and overwrite destination files if they already exist.
-            //    foreach (string s in files)
-            //    {
-            //        // Use static Path methods to extract only the file name from the path.
-            //        var fileName = System.IO.Path.GetFileName(s);
-            //        var destFile = System.IO.Path.Combine(BackupDirectoryText.Text, fileName);
-            //        DebugLabel.Text = "Copying " + fileName + "...";
-            //        fileCount++;
-            //        System.IO.File.Copy(s, destFile, true);
-            //    }
-
-            //    DebugLabel.Text = fileCount + " files backed up at" + DateTime.Now.TimeOfDay + ".";
-            //    MessageBox.Show("Backed up " + fileCount + " files successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Source path does not exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
         }
 
         private void BackupDirButton_Click(object sender, EventArgs e)
