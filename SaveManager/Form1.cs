@@ -9,16 +9,28 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace SaveManager
 {
     public partial class Form1 : Form
     {
         private int totalFilesBackedUp, totalMainDirectoriesBackedUp;
+        private const string configFile = "config.json";
 
         public Form1()
         {
             InitializeComponent();
+
+            CreateLocalConfigFile();
+        }
+
+        private void CreateLocalConfigFile()
+        {
+            if (!File.Exists(configFile))
+            {
+                File.Create(configFile);
+            }
         }
 
         private void BackupButton_Click(object sender, EventArgs e)
@@ -28,7 +40,6 @@ namespace SaveManager
 
         private void BackupDirectory()
         {
-
             for (int i = 0; i < SaveDirectoryList.Items.Count; i++)
             {
                 string fullPath = Path.GetFullPath(SaveDirectoryList.Items[i].ToString()).TrimEnd(Path.DirectorySeparatorChar);
@@ -73,13 +84,17 @@ namespace SaveManager
 
         private void BackupDirButton_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog backupBrowser = new FolderBrowserDialog();
+            FolderBrowserDialog backupDirectoryBrowser = new FolderBrowserDialog();
 
-            if (backupBrowser.ShowDialog() == DialogResult.OK)
+            if (backupDirectoryBrowser.ShowDialog() == DialogResult.OK)
             {
-                BackupDirectoryText.Text = backupBrowser.SelectedPath;
-                SetInfoText("Backup directory set to " + backupBrowser.SelectedPath);
+                BackupDirectoryText.Text = backupDirectoryBrowser.SelectedPath;
+                var serializedBackupPath = JsonConvert.SerializeObject(backupDirectoryBrowser.SelectedPath, Formatting.Indented);
+                File.WriteAllText(configFile, serializedBackupPath);
+                SetInfoText("Backup directory set to " + backupDirectoryBrowser.SelectedPath);
             }
+
+            backupDirectoryBrowser.Dispose();
         } 
 
         private void AddButton_Click(object sender, EventArgs e)
@@ -110,6 +125,8 @@ namespace SaveManager
                 SaveDirectoryList.Items.Add(saveDataBrowser.SelectedPath, true);
                 SetInfoText("Added " + saveDataBrowser.SelectedPath);
             }
+
+            saveDataBrowser.Dispose();
         }
         private void SetInfoText(string s)
         {

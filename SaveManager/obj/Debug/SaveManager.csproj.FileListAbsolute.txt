@@ -24,3 +24,6 @@ C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\obj\Debug\SaveManage
 C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\obj\Debug\en\SaveManager.resources.dll
 C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\obj\Debug\SaveManager.exe
 C:\Users\Teste\Desktop\Projetos\SaveDataManager\SaveManager\obj\Debug\SaveManager.pdb
+C:\Users\josef\source\repos\SaveManager\SaveManager\bin\Debug\Newtonsoft.Json.dll
+C:\Users\josef\source\repos\SaveManager\SaveManager\bin\Debug\Newtonsoft.Json.xml
+C:\Users\josef\source\repos\SaveManager\SaveManager\obj\Debug\SaveManager.csproj.CopyComplete
