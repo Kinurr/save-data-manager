@@ -132,22 +132,5 @@ namespace SaveManager
         {
             DebugLabel.Text = s;
         }
-
-        //private void IsDuplicate(Object obj)
-        //{
-        //    for (int i = 0; i < SaveDirectoryList.Items.Count; i++)
-        //    {
-        //        Console.WriteLine(SaveDirectoryList.Items[i] == obj);
-
-        //        if (SaveDirectoryList.Items[i] == obj)
-        //        {
-        //            //messagebox.show("the directory you tried to add is already in the list.", "error - duplicate",
-        //            //    messageboxbuttons.ok, messageboxicon.error);
-        //            //return true;
-        //        }
-        //    }
-
-        //    //return false;
-        //}
     }
 }
