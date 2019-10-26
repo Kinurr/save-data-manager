@@ -13,16 +13,15 @@ using Newtonsoft.Json;
 
 namespace SaveManager
 {
-    public partial class Form1 : Form
+    public partial class SaveManagerForm : Form
     {
         private int totalFilesBackedUp, totalMainDirectoriesBackedUp;
         private const string configFile = "config.json";
-        private List<SaveFiles> saveFiles;
+        private static int saveIDCounter = 0;
 
-        public Form1()
+        public SaveManagerForm()
         {
             InitializeComponent();
-
             CreateLocalConfigFile();
         }
 
@@ -112,7 +111,8 @@ namespace SaveManager
 
         private void AddButton_Click(object sender, EventArgs e)
         {
-            AddDirectoryToList();
+            AddSaveFileForm addSaveFileForm = new AddSaveFileForm(saveIDCounter, SaveDirectoryList);
+            addSaveFileForm.ShowDialog();
         }
 
         private void RemoveButton_Click(object sender, EventArgs e)
@@ -136,17 +136,9 @@ namespace SaveManager
             SaveDirectoryList.Columns.Add("Path", "Path");
         }
 
-        private void AddDirectoryToList()
+        private void label2_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog saveDataBrowser = new FolderBrowserDialog();
 
-            if (saveDataBrowser.ShowDialog() == DialogResult.OK)
-            {
-                SaveDirectoryList.Rows.Add("Teste", "Teste", saveDataBrowser.SelectedPath);
-                SetInfoText("Added " + saveDataBrowser.SelectedPath);
-            }
-
-            saveDataBrowser.Dispose();
         }
 
         private void SetInfoText(string s)

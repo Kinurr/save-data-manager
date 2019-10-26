@@ -1,4 +1,6 @@
-﻿struct SaveFiles
+﻿using System;
+
+class SaveFiles
 {
     public enum Platforms
     {
@@ -26,7 +28,18 @@
         THREEDS,
     }
 
-    public string ID, Game, OriginalPath, BackupPath;
-    public Platforms Platform;
-    public System.DateTime lastBackupDate;
+    public int ID { get; set; }
+    public string Game { get; set; }
+    public string OriginalPath { get; set; }
+    public string BackupPath { get; set; }
+    internal Platforms Platform { get; set; }
+    public DateTime LastBackupDate { get; set; }
+
+    public SaveFiles(int _ID, string _Game, string _OriginalPath, Platforms _Platform)
+    {
+        ID = _ID;
+        Game = _Game;
+        OriginalPath = _OriginalPath;
+        Platform = _Platform;
+    }
 }
