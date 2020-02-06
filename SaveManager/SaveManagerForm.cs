@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -15,27 +17,50 @@ namespace SaveManager
 {
     public partial class SaveManagerForm : Form
     {
-        private int totalFilesBackedUp, totalMainDirectoriesBackedUp;
-        private const string configFile = "config.json";
         private static int saveIDCounter = 0;
+        private List<SaveFile> saveFiles;
 
         public SaveManagerForm()
         {
             InitializeComponent();
-            CreateLocalConfigFile();
-        }
 
-        private void CreateLocalConfigFile()
-        {
-            if (!File.Exists(configFile))
-            {
-                File.Create(configFile);
-            }
+            string _localBackupDirectory = Properties.Settings.Default.LocalBackupDirectory;
+            saveFiles = new List<SaveFile>();
+
+            if (_localBackupDirectory == "")
+                BackupDirectoryText.Text = Directory.GetCurrentDirectory() + Properties.Settings.Default.DefaultBakcupDirectory;
+            else
+                BackupDirectoryText.Text = Properties.Settings.Default.LocalBackupDirectory;
+
+            CreateManifestFile(BackupDirectoryText.Text);
+            GetSavesFromManifest();
+
         }
 
         private void BackupButton_Click(object sender, EventArgs e)
         {
             BackupDirectory();
+        }
+
+        private void GetSavesFromManifest()
+        {
+            List<SaveFile> _list = JsonConvert.DeserializeObject<List<SaveFile>>(File.ReadAllText(BackupDirectoryText.Text + "\\savemanifest.json"));
+
+            saveFiles.Clear();
+
+            if( _list != null)
+                foreach (SaveFile sf in _list)
+                    saveFiles.Add(sf);
+
+            RefreshUIList();
+        }
+
+        private void RefreshUIList()
+        {
+            SaveDirectoryList.Rows.Clear();
+
+            foreach (SaveFile sf in saveFiles)
+                SaveDirectoryList.Rows.Add(sf.Game, sf.Platform, sf.OriginalPath);
         }
 
         private void BackupDirectory()
@@ -68,7 +93,6 @@ namespace SaveManager
                     try
                     {
                         File.Copy(newPath, newPath.Replace(fullPath, targetPath), true);
-                        totalFilesBackedUp++;
                         SetInfoText("Copied file " + fullPath);
                     }
                     catch (IOException exception)
@@ -77,7 +101,6 @@ namespace SaveManager
                     }
                 }
 
-                totalMainDirectoriesBackedUp++;
                 titles.Add(SaveDirectoryList.Rows[i].Cells[0].Value.ToString());
             }
 
@@ -89,7 +112,7 @@ namespace SaveManager
                 formattedList += "  - " + title + "\n";
             }
 
-            MessageBox.Show("Sucessfully backed up the following games: \n \n" + formattedList, "Backup Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Sucessfully backed up save files: \n \n" + formattedList, "Backup Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
            // MessageBox.Show("Sucessfully backed up " + totalMainDirectoriesBackedUp + " main directories containing a total of " +
              //   totalFilesBackedUp + " files.", "Backup Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -98,12 +121,14 @@ namespace SaveManager
         {
             FolderBrowserDialog backupDirectoryBrowser = new FolderBrowserDialog();
 
+
             if (backupDirectoryBrowser.ShowDialog() == DialogResult.OK)
             {
                 BackupDirectoryText.Text = backupDirectoryBrowser.SelectedPath;
-                var serializedBackupPath = JsonConvert.SerializeObject(backupDirectoryBrowser.SelectedPath, Formatting.Indented);
-                File.WriteAllText(configFile, serializedBackupPath);
                 SetInfoText("Backup directory set to " + backupDirectoryBrowser.SelectedPath);
+                CreateManifestFile(BackupDirectoryText.Text);
+                Properties.Settings.Default.LocalBackupDirectory = backupDirectoryBrowser.SelectedPath;
+                Properties.Settings.Default.Save();
             }
 
             backupDirectoryBrowser.Dispose();
@@ -111,8 +136,9 @@ namespace SaveManager
 
         private void AddButton_Click(object sender, EventArgs e)
         {
-            AddSaveFileForm addSaveFileForm = new AddSaveFileForm(saveIDCounter, SaveDirectoryList);
+            AddSaveFileForm addSaveFileForm = new AddSaveFileForm(saveIDCounter, saveFiles, BackupDirectoryText.Text);
             addSaveFileForm.ShowDialog();
+            RefreshUIList();
         }
 
         private void RemoveButton_Click(object sender, EventArgs e)
@@ -131,19 +157,18 @@ namespace SaveManager
         {
             SetInfoText("Application started");
             SaveDirectoryList.AllowUserToAddRows = false;
-            SaveDirectoryList.Columns.Add("Title", "Title");
-            SaveDirectoryList.Columns.Add("Platform", "Platform");
-            SaveDirectoryList.Columns.Add("Path", "Path");
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void SetInfoText(string s)
         {
             DebugLabel.Text = s;
         }
+
+        private void CreateManifestFile(string path)
+        {
+            if (!File.Exists(path + "\\savemanifest.json"))
+                File.Create(path + "\\savemanifest.json");
+        }
+
     }
 }

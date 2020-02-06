@@ -19,5 +19,10 @@ namespace SaveManager
 
             return formattedList;
         }
+
+        public void ClearUserSettings()
+        {
+            Properties.Settings.Default.LocalBackupDirectory = "";
+        }
     }
 }

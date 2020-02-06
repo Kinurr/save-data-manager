@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace SaveManager
 {
@@ -16,14 +17,18 @@ namespace SaveManager
     {
 
         private int saveFileID;
-        private DataGridView saveDirectoryList;
-        private SaveFiles saveFile;
+        private List<SaveFile> saveFiles;
+        private SaveFile saveFile;
+        private string backupPath;
+        JsonSerializer serializer;
 
 
-        public AddSaveFileForm(int _saveFileID, DataGridView _saveDirectoryList)
+        public AddSaveFileForm(int _saveFileID, List<SaveFile> _saveFiles, string _backupPath)
         {
             saveFileID = _saveFileID;
-            saveDirectoryList = _saveDirectoryList;
+            saveFiles = _saveFiles;
+            backupPath = _backupPath;
+            serializer = new JsonSerializer();
 
             InitializeComponent();
         }
@@ -36,7 +41,7 @@ namespace SaveManager
         private void AddSaveFileForm_Load(object sender, EventArgs e)
         {
             idTextBox.Text = saveFileID.ToString();
-            platformCBox.DataSource = Enum.GetValues(typeof(SaveFiles.Platforms));
+            platformCBox.DataSource = Enum.GetValues(typeof(SaveFile.Platforms));
 
             CenterToParent();
         }
@@ -50,7 +55,8 @@ namespace SaveManager
         {
             if(saveFile != null)
             {
-                saveDirectoryList.Rows.Add(saveFile.Game, saveFile.Platform, saveFile.OriginalPath);
+                saveFiles.Add(saveFile);
+                SerializeAndSaveToJSON();
                 this.Close();
             }
             else
@@ -68,7 +74,7 @@ namespace SaveManager
                 string fullPath = Path.GetFullPath(saveDataBrowser.SelectedPath).TrimEnd(Path.DirectorySeparatorChar);
                 string folderName = Path.GetFileName(fullPath);
 
-                saveFile = new SaveFiles(saveFileID, folderName, saveDataBrowser.SelectedPath, SaveFiles.Platforms.PC);
+                saveFile = new SaveFile(saveFileID, folderName, saveDataBrowser.SelectedPath, SaveFile.Platforms.PC);
 
                 gameNameTextBox.Text = saveFile.Game;
                 pathTextBox.Text = saveDataBrowser.SelectedPath;
@@ -76,6 +82,21 @@ namespace SaveManager
             }
 
             saveDataBrowser.Dispose();
+        }
+
+        private void SerializeAndSaveToJSON()
+        {
+            string jsonPath = backupPath + "\\savemanifest.json";
+
+            using (StreamWriter sw = new StreamWriter(jsonPath))
+            using (JsonWriter writer = new JsonTextWriter(sw))
+            {
+                serializer.Serialize(writer, saveFiles);
+                // {"ExpiryDate":new Date(1230375600000),"Price":0}
+            }
+
+            //string serializedSaveFile = serializer.Serialize(backupPath + "\\savemanifest.json", saveFile);
+            //File.WriteAllText(backupPath + "\\savemanifest.json", serializedSaveFile);
         }
     }
 }

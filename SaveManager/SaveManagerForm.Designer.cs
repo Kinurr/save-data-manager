@@ -35,10 +35,13 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.DebugLabel = new System.Windows.Forms.Label();
             this.RemoveButton = new System.Windows.Forms.Button();
-            this.BackupDirectoryText = new System.Windows.Forms.TextBox();
             this.BackupDirButton = new System.Windows.Forms.Button();
             this.BackupButton = new System.Windows.Forms.Button();
             this.SaveDirectoryList = new System.Windows.Forms.DataGridView();
+            this.BackupDirectoryText = new System.Windows.Forms.TextBox();
+            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Platform = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.OriginalPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.SaveDirectoryList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -51,7 +54,6 @@
             // 
             resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // AddButton
             // 
@@ -77,12 +79,6 @@
             this.RemoveButton.UseVisualStyleBackColor = true;
             this.RemoveButton.Click += new System.EventHandler(this.RemoveButton_Click);
             // 
-            // BackupDirectoryText
-            // 
-            resources.ApplyResources(this.BackupDirectoryText, "BackupDirectoryText");
-            this.BackupDirectoryText.Name = "BackupDirectoryText";
-            this.BackupDirectoryText.ReadOnly = true;
-            // 
             // BackupDirButton
             // 
             resources.ApplyResources(this.BackupDirButton, "BackupDirButton");
@@ -101,9 +97,35 @@
             // 
             this.SaveDirectoryList.BackgroundColor = System.Drawing.SystemColors.Window;
             this.SaveDirectoryList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.SaveDirectoryList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Title,
+            this.Platform,
+            this.OriginalPath});
             resources.ApplyResources(this.SaveDirectoryList, "SaveDirectoryList");
             this.SaveDirectoryList.Name = "SaveDirectoryList";
             this.SaveDirectoryList.RowTemplate.Height = 24;
+            // 
+            // BackupDirectoryText
+            // 
+            resources.ApplyResources(this.BackupDirectoryText, "BackupDirectoryText");
+            this.BackupDirectoryText.Name = "BackupDirectoryText";
+            this.BackupDirectoryText.ReadOnly = true;
+            this.BackupDirectoryText.Text = global::SaveManager.Properties.Settings.Default.LocalBackupDirectory;
+            // 
+            // Title
+            // 
+            resources.ApplyResources(this.Title, "Title");
+            this.Title.Name = "Title";
+            // 
+            // Platform
+            // 
+            resources.ApplyResources(this.Platform, "Platform");
+            this.Platform.Name = "Platform";
+            // 
+            // OriginalPath
+            // 
+            resources.ApplyResources(this.OriginalPath, "OriginalPath");
+            this.OriginalPath.Name = "OriginalPath";
             // 
             // SaveManagerForm
             // 
@@ -140,6 +162,9 @@
         private System.Windows.Forms.Button BackupDirButton;
         private System.Windows.Forms.Button BackupButton;
         private System.Windows.Forms.DataGridView SaveDirectoryList;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Title;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Platform;
+        private System.Windows.Forms.DataGridViewTextBoxColumn OriginalPath;
     }
 }
 
