@@ -348,6 +348,15 @@
   <data name="Title.HeaderText" xml:space="preserve">
     <value>Title</value>
   </data>
+  <metadata name="LastBackupDate.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="LastBackupDate.HeaderText" xml:space="preserve">
+    <value>Last Backup Date</value>
+  </data>
+  <data name="LastBackupDate.Width" type="System.Int32, mscorlib">
+    <value>120</value>
+  </data>
   <metadata name="Platform.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -361,7 +370,7 @@
     <value>OG Path</value>
   </data>
   <data name="SaveDirectoryList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 76</value>
+    <value>11, 75</value>
   </data>
   <data name="SaveDirectoryList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -424,6 +433,12 @@
     <value>Title</value>
   </data>
   <data name="&gt;&gt;Title.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LastBackupDate.Name" xml:space="preserve">
+    <value>LastBackupDate</value>
+  </data>
+  <data name="&gt;&gt;LastBackupDate.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;Platform.Name" xml:space="preserve">

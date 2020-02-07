@@ -44,32 +44,44 @@ namespace SaveManager
 
         private void GetSavesFromManifest()
         {
-            List<SaveFile> _list = JsonConvert.DeserializeObject<List<SaveFile>>(File.ReadAllText(BackupDirectoryText.Text + "\\savemanifest.json"));
+            try
+            {
+                List<SaveFile> _list = JsonConvert.DeserializeObject<List<SaveFile>>(File.ReadAllText(BackupDirectoryText.Text + "\\savemanifest.json"));
+                saveFiles.Clear();
 
-            saveFiles.Clear();
+                if( _list != null)
+                    foreach (SaveFile sf in _list)
+                        saveFiles.Add(sf);
 
-            if( _list != null)
-                foreach (SaveFile sf in _list)
-                    saveFiles.Add(sf);
+                RefreshUIList();
+            }
+            catch (IOException e)
+            {
+                MessageBox.Show(e.Message + "\n A new file will now be created.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
-            RefreshUIList();
         }
 
         private void RefreshUIList()
         {
             SaveDirectoryList.Rows.Clear();
 
-            foreach (SaveFile sf in saveFiles)
-                SaveDirectoryList.Rows.Add(sf.Game, sf.Platform, sf.OriginalPath);
+            foreach (SaveFile sf in saveFiles) {
+
+                var date = (DateTime.Compare(sf.LastBackupDate, DateTime.Parse("0001-01-01T00:00:00")) == 0) ? "Not Backed Up" : sf.LastBackupDate.ToString();
+                SaveDirectoryList.Rows.Add(sf.Title, date, sf.Platform, sf.OriginalPath);
+            }
         }
 
         private void BackupDirectory()
         {
             List<string> titles = new List<string>();
 
-            for (int i = 0; i < SaveDirectoryList.Rows.Count; i++)
+            foreach (SaveFile sf in saveFiles)
             {
-                string fullPath = Path.GetFullPath(SaveDirectoryList.Rows[i].Cells[2].Value.ToString()).TrimEnd(Path.DirectorySeparatorChar);
+
+                //Copy the save folder into the backup directory
+                string fullPath = Path.GetFullPath(sf.OriginalPath);
                 string folderName = Path.GetFileName(fullPath);
 
                 string targetPath = Path.Combine(BackupDirectoryText.Text, folderName);
@@ -101,7 +113,11 @@ namespace SaveManager
                     }
                 }
 
-                titles.Add(SaveDirectoryList.Rows[i].Cells[0].Value.ToString());
+                //Add to list of backed up titles
+                titles.Add(sf.Title);
+
+                //Update last backup date
+                sf.LastBackupDate = DateTime.Now;
             }
 
             //TODO: Put this in a function and class of its own called Utils
@@ -113,8 +129,9 @@ namespace SaveManager
             }
 
             MessageBox.Show("Sucessfully backed up save files: \n \n" + formattedList, "Backup Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
-           // MessageBox.Show("Sucessfully backed up " + totalMainDirectoriesBackedUp + " main directories containing a total of " +
-             //   totalFilesBackedUp + " files.", "Backup Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            Utils.SerializeAndSaveToJSON(BackupDirectoryText.Text + "\\savemanifest.json", saveFiles);
+            RefreshUIList();
         }
 
         private void BackupDirButton_Click(object sender, EventArgs e)

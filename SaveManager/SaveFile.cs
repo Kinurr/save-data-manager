@@ -25,11 +25,11 @@ public class SaveFile
         GAMEBOYCOLOR,
         GAMEBOYADVANCE,
         DS,
-        THREEDS,
+        THREE_DS,
     }
 
     public int ID { get; set; }
-    public string Game { get; set; }
+    public string Title { get; set; }
     public string OriginalPath { get; set; }
     internal Platforms Platform { get; set; }
     public DateTime LastBackupDate { get; set; }
@@ -37,7 +37,7 @@ public class SaveFile
     public SaveFile(int _ID, string _Game, string _OriginalPath, Platforms _Platform)
     {
         ID = _ID;
-        Game = _Game;
+        Title = _Game;
         OriginalPath = _OriginalPath;
         Platform = _Platform;
     }

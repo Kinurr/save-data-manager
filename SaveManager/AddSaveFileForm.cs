@@ -30,6 +30,9 @@ namespace SaveManager
             backupPath = _backupPath;
             serializer = new JsonSerializer();
 
+            saveFile = new SaveFile(saveFileID, "", "", SaveFile.Platforms.PC);
+
+
             InitializeComponent();
         }
 
@@ -56,7 +59,7 @@ namespace SaveManager
             if(saveFile != null)
             {
                 saveFiles.Add(saveFile);
-                SerializeAndSaveToJSON();
+                Utils.SerializeAndSaveToJSON(backupPath + "\\savemanifest.json", saveFiles);
                 this.Close();
             }
             else
@@ -74,29 +77,19 @@ namespace SaveManager
                 string fullPath = Path.GetFullPath(saveDataBrowser.SelectedPath).TrimEnd(Path.DirectorySeparatorChar);
                 string folderName = Path.GetFileName(fullPath);
 
-                saveFile = new SaveFile(saveFileID, folderName, saveDataBrowser.SelectedPath, SaveFile.Platforms.PC);
-
-                gameNameTextBox.Text = saveFile.Game;
+                saveFile.Title = folderName;
+                saveFile.OriginalPath = fullPath;
+                gameNameTextBox.Text = folderName;
                 pathTextBox.Text = saveDataBrowser.SelectedPath;
-                platformCBox.SelectedItem = saveFile.Platform;
+                saveFile.Platform = (SaveFile.Platforms)platformCBox.SelectedItem;
             }
 
             saveDataBrowser.Dispose();
         }
 
-        private void SerializeAndSaveToJSON()
+        private void platformCBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string jsonPath = backupPath + "\\savemanifest.json";
-
-            using (StreamWriter sw = new StreamWriter(jsonPath))
-            using (JsonWriter writer = new JsonTextWriter(sw))
-            {
-                serializer.Serialize(writer, saveFiles);
-                // {"ExpiryDate":new Date(1230375600000),"Price":0}
-            }
-
-            //string serializedSaveFile = serializer.Serialize(backupPath + "\\savemanifest.json", saveFile);
-            //File.WriteAllText(backupPath + "\\savemanifest.json", serializedSaveFile);
+            saveFile.Platform = (SaveFile.Platforms)platformCBox.SelectedItem;
         }
     }
 }

@@ -40,6 +40,7 @@
             this.SaveDirectoryList = new System.Windows.Forms.DataGridView();
             this.BackupDirectoryText = new System.Windows.Forms.TextBox();
             this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LastBackupDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Platform = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.OriginalPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.SaveDirectoryList)).BeginInit();
@@ -99,6 +100,7 @@
             this.SaveDirectoryList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.SaveDirectoryList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Title,
+            this.LastBackupDate,
             this.Platform,
             this.OriginalPath});
             resources.ApplyResources(this.SaveDirectoryList, "SaveDirectoryList");
@@ -116,6 +118,11 @@
             // 
             resources.ApplyResources(this.Title, "Title");
             this.Title.Name = "Title";
+            // 
+            // LastBackupDate
+            // 
+            resources.ApplyResources(this.LastBackupDate, "LastBackupDate");
+            this.LastBackupDate.Name = "LastBackupDate";
             // 
             // Platform
             // 
@@ -163,6 +170,7 @@
         private System.Windows.Forms.Button BackupButton;
         private System.Windows.Forms.DataGridView SaveDirectoryList;
         private System.Windows.Forms.DataGridViewTextBoxColumn Title;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LastBackupDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn Platform;
         private System.Windows.Forms.DataGridViewTextBoxColumn OriginalPath;
     }
